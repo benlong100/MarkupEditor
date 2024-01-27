@@ -18,27 +18,109 @@ public struct FormatToolbar: View {
 
     public var body: some View {
         LabeledToolbar(label: hoverLabel) {
-            ToolbarImageButton(
-                systemName: "bold",
-                action: { observedWebView.selectedWebView?.bold() },
-                active: $selectionState.bold,
-                onHover: { over in hoverLabel = Text(over ? "Bold" : "Text Format") }
-            )
-            ToolbarImageButton (
-                systemName: "italic",
-                action: { observedWebView.selectedWebView?.italic() },
-                active: $selectionState.italic,
-                onHover: { over in hoverLabel = Text(over ? "Italic" : "Text Format") }
-            )
-            ToolbarImageButton(
-                systemName: "underline",
-                action: { observedWebView.selectedWebView?.underline() },
-                active: $selectionState.underline,
-                onHover: { over in hoverLabel = Text(over ? "Underline" : "Text Format") }
-            )
-            if contents.code {
+           
+           if MarkupEditorView.whichEditor == "Log" {
+              ToolbarTextButton(
+               title: "BOLD",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  observedWebView.selectedWebView?.bold() },
+               active: $selectionState.bold
+              )
+           } else {
+              ToolbarImageButton(
+               systemName: "bold",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  observedWebView.selectedWebView?.bold()
+               },
+               active: $selectionState.bold,
+               onHover: { over in hoverLabel = Text(over ? "Bold" : "Text Format") }
+              )
+           }
+           if MarkupEditorView.whichEditor == "Log" {
+              ToolbarTextButton(
+               title: "ITALIC",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  observedWebView.selectedWebView?.italic()
+               },
+               active: $selectionState.italic
+              )
+           } else {
+              ToolbarImageButton (
+               systemName: "italic",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  
+                  observedWebView.selectedWebView?.italic()
+               },
+               active: $selectionState.italic,
+               onHover: { over in hoverLabel = Text(over ? "Italic" : "Text Format") }
+              )
+           }
+           
+//           if MarkupEditorView.whichEditor == "Log" {
+//              ToolbarTextButton(
+//               title: "UNDERLINE",
+//               action: { observedWebView.selectedWebView?.underline()}
+//              )
+//           } else {
+//              ToolbarImageButton(
+//               systemName: "underline",
+//               action: { observedWebView.selectedWebView?.underline() },
+//               active: $selectionState.underline,
+//               onHover: { over in hoverLabel = Text(over ? "Underline" : "Text Format") }
+//              )
+//           }
+           if MarkupEditorView.whichEditor == "Log" {
+              ToolbarTextButton(
+               title: "SUBHEAD",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  
+                  observedWebView.selectedWebView?.replaceStyle(selectionState.style, with: StyleContext.H1)
+               }
+              )
+           } else {
+              ToolbarImageButton(
+               systemName: "character.magnify",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  
+                  observedWebView.selectedWebView?.replaceStyle(selectionState.style, with: StyleContext.H1)
+               },
+               active: $selectionState.underline,
+               onHover: { over in hoverLabel = Text(over ? "Subhead" : "Text Format") }
+              )
+           }
+           
+           if MarkupEditorView.whichEditor == "Log" {
+              ToolbarTextButton(
+               title: "MOVE",
+               action: {
+                  if MarkupEditorView.whichSkin == "LCARS" {
+//                     play(sound: "computerbeep_15.mp3")
+                  }
+                  observedWebView.selectedWebView?.code()
+               },
+               active: $selectionState.code
+              )
+           } else {
                 ToolbarImageButton(
-                    systemName: "curlybraces",
+                    systemName: "figure.walk",
                     action: { observedWebView.selectedWebView?.code() },
                     active: $selectionState.code,
                     onHover: { over in hoverLabel = Text(over ? "Code" : "Text Format") }
@@ -69,21 +151,21 @@ public struct FormatToolbar: View {
         }
     }
 }
-
-struct FormatToolbar_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                FormatToolbar()
-                    .environmentObject(ToolbarStyle.compact)
-                Spacer()
-            }
-            HStack {
-                FormatToolbar()
-                    .environmentObject(ToolbarStyle.labeled)
-                Spacer()
-            }
-            Spacer()
-        }
-    }
-}
+//
+//struct FormatToolbar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VStack(alignment: .leading) {
+//            HStack {
+//                FormatToolbar()
+//                    .environmentObject(ToolbarStyle.compact)
+//                Spacer()
+//            }
+//            HStack {
+//                FormatToolbar()
+//                    .environmentObject(ToolbarStyle.labeled)
+//                Spacer()
+//            }
+//            Spacer()
+//        }
+//    }
+//}

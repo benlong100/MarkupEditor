@@ -65,7 +65,7 @@ class LinkViewController: UIViewController {
         linkView.autocorrectionType = .no
         linkView.delegate = self
         linkViewLabel = UILabel()
-        linkViewLabel.text = "Enter link URL"
+        linkViewLabel.text = "file://[Library entry title] or http://[external link]"
         linkViewLabel.font = .italicSystemFont(ofSize: (linkView.font?.pointSize)!)
         linkViewLabel.sizeToFit()
         linkView.addSubview(linkViewLabel)
@@ -259,7 +259,34 @@ class LinkViewController: UIViewController {
 extension LinkViewController: UITextViewDelegate {
     
     /// Update href as the user types (note this never executes if shouldChangeTextIn returns false)
-    func textViewDidChange(_ textView: UITextView) {
+   func textViewDidChange(_ textView: UITextView) {
+      if textView.text.hasPrefix("file://") == false {
+         if textView.text.hasPrefix("http://") == false {
+            switch textView.text.prefix(6){
+            case "h":
+               textView.text = textView.text
+            case "ht":
+               textView.text = textView.text
+            case "htt":
+               textView.text = textView.text
+            case "http":
+               textView.text = textView.text
+            case "http:":
+               textView.text = textView.text
+            case "http:/":
+               textView.text = textView.text
+               //             case "http://":
+               //                textView.text = textView.text
+            default:
+//               textView.text = textView.text
+               textView.text = "file://" + textView.text
+            }
+         }
+      }
+      
+      if textView.text.contains(" ") {
+         textView.text = textView.text.replacingOccurrences(of: " ", with: "_")
+       }
         href = textView.text
         linkViewLabel.isHidden = !textView.text.isEmpty
         setButtons()

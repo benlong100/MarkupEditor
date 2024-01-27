@@ -31,6 +31,12 @@ public struct MarkupEditorView: View, MarkupDelegate {
     private var selectAfterLoad: Bool = true
     /// The placeholder text that should be shown when there is no user input.
     public var placeholder: String?
+   
+   // Ansible interface variables. These tell us whether we're usign the log or library editor, and which skin we're using
+   public static var whichEditor : String?
+   public static var whichSkin : String?
+   public static var customCaretColor : String?
+
     
     public var body: some View {
         VStack(spacing: 0) {
@@ -54,6 +60,11 @@ public struct MarkupEditorView: View, MarkupDelegate {
         configuration: MarkupWKWebViewConfiguration? = nil,
         html: Binding<String>? = nil,
         placeholder: String? = nil,
+
+        // These two are mine:
+        whichEditor: String? = nil,
+        whichSkin: String? = nil,
+
         selectAfterLoad: Bool = true,
         resourcesUrl: URL? = nil,
         id: String? = nil) {
@@ -67,12 +78,14 @@ public struct MarkupEditorView: View, MarkupDelegate {
             self.resourcesUrl = resourcesUrl
             self.id = id
             self.placeholder = placeholder
+           MarkupEditorView.whichEditor = whichEditor
+           MarkupEditorView.whichSkin = whichSkin
         }
 
 }
-
-struct MarkupEditorView_Previews: PreviewProvider {
-    static var previews: some View {
-            MarkupEditorView()
-    }
-}
+//
+//struct MarkupEditorView_Previews: PreviewProvider {
+//    static var previews: some View {
+//            MarkupEditorView()
+//    }
+//}

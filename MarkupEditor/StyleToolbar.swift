@@ -116,21 +116,21 @@ public struct StyleToolbar: View {
     }
     
 }
-
-struct StyleToolbar_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                StyleToolbar()
-                    .environmentObject(ToolbarStyle.compact)
-                Spacer()
-            }
-            HStack {
-                StyleToolbar()
-                    .environmentObject(ToolbarStyle.labeled)
-                Spacer()
-            }
-            Spacer()
-        }
-    }
-}
+//
+//struct StyleToolbar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VStack(alignment: .leading) {
+//            HStack {
+//                StyleToolbar()
+//                    .environmentObject(ToolbarStyle.compact)
+//                Spacer()
+//            }
+//            HStack {
+//                StyleToolbar()
+//                    .environmentObject(ToolbarStyle.labeled)
+//                Spacer()
+//            }
+//            Spacer()
+//        }
+//    }
+//}

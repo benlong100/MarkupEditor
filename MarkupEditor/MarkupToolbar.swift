@@ -29,11 +29,12 @@ public struct MarkupToolbar: View {
     public var body: some View {
         ZStack(alignment: .topLeading) {
             HStack {
-                ScrollView(.horizontal) {
+//                ScrollView(.horizontal) {
                     HStack {
-                        if contents.leftToolbar {
-                            MarkupEditor.leftToolbar!
-                        }
+                       Spacer()
+//                        if contents.leftToolbar {
+//                            MarkupEditor.leftToolbar!
+//                        }
                         if contents.correction {
                             if contents.leftToolbar { Divider() }
                             CorrectionToolbar()
@@ -50,28 +51,31 @@ public struct MarkupToolbar: View {
                             if contents.leftToolbar || contents.correction  || contents.insert || contents.style { Divider() }
                             FormatToolbar()
                         }
-                        if contents.rightToolbar {
-                            if contents.leftToolbar || contents.correction  || contents.insert || contents.style || contents.format { Divider() }
-                            MarkupEditor.rightToolbar!
-                        }
-                        Spacer()                // Push everything to the left
+//                        if contents.rightToolbar {
+//                            if contents.leftToolbar || contents.correction  || contents.insert || contents.style || contents.format { Divider() }
+//                            MarkupEditor.rightToolbar!
+//                        }
+                       if MarkupEditorView.whichSkin != "LCARS" {
+                          Spacer()                // Push everything to the left
+                       }
                     }
                     .environmentObject(toolbarStyle)
                     .padding(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
+                    .padding(.trailing, MarkupEditorView.whichSkin == "LCARS" ? 8 : 0 )
                     .disabled(observedWebView.selectedWebView == nil || !selectionState.valid)
-                }
-                .onTapGesture {}    // To make the buttons responsive inside of the ScrollView
-                if withKeyboardButton {
-                    Spacer()
-                    Divider()
-                    ToolbarImageButton(
-                        systemName: "keyboard.chevron.compact.down",
-                        action: {
-                            _ = MarkupEditor.selectedWebView?.resignFirstResponder()
-                        }
-                    )
-                    Spacer()
-                }
+//                }
+//                .onTapGesture {}    // To make the buttons responsive inside of the ScrollView
+//                if withKeyboardButton {
+//                    Spacer()
+//                    Divider()
+//                    ToolbarImageButton(
+//                        systemName: "keyboard.chevron.compact.down",
+//                        action: {
+//                            _ = MarkupEditor.selectedWebView?.resignFirstResponder()
+//                        }
+//                    )
+//                    Spacer()
+//                }
             }
         }
         // Because the icons in toolbars are sized based on font, we need to limit their dynamicTypeSize
@@ -88,6 +92,9 @@ public struct MarkupToolbar: View {
         self.contents = toolbarContents
         self.withKeyboardButton = withKeyboardButton
         self.markupDelegate = markupDelegate
+#if DEBUG
+       MarkupEditor.isInspectable = true
+#endif
     }
     
     public func makeManaged() -> MarkupToolbar {
@@ -96,22 +103,21 @@ public struct MarkupToolbar: View {
     }
 
 }
-
-//MARK: Previews
-
-struct MarkupToolbar_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        VStack(alignment: .leading) {
-            MarkupToolbar(.compact)
-            MarkupToolbar(.labeled)
-            Spacer()
-        }
-        .onAppear {
-            MarkupEditor.selectedWebView = MarkupWKWebView()
-            MarkupEditor.selectionState.valid = true
-        }
-    }
-}
-
+//
+////MARK: Previews
+//
+//struct MarkupToolbar_Previews: PreviewProvider {
+//    
+//    static var previews: some View {
+//        VStack(alignment: .leading) {
+//            MarkupToolbar(.compact)
+//            MarkupToolbar(.labeled)
+//            Spacer()
+//        }
+//        .onAppear {
+//            MarkupEditor.selectedWebView = MarkupWKWebView()
+//            MarkupEditor.selectionState.valid = true
+//        }
+//    }
+//}
 

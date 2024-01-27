@@ -17,6 +17,8 @@ import SwiftUI
 /// uses a UIKit or SwiftUI method depending on the type of insert popover chosen. This way we also get consistent
 /// behavior between buttons in the InsertToolbar and the menu selections while giving flexibility on user-supplied
 /// presentation.
+
+
 public struct InsertToolbar: View {
     @ObservedObject private var selectionState: SelectionState = MarkupEditor.selectionState
     @ObservedObject private var showPopoverType: ShowInsertPopover = MarkupEditor.showInsertPopover
@@ -29,12 +31,20 @@ public struct InsertToolbar: View {
     public var body: some View {
         LabeledToolbar(label: hoverLabel) {
             if contents.link {
-                ToolbarImageButton(
-                    systemName: "link",
-                    action: { MarkupEditor.selectedWebView?.showPluggableLinkPopover() },
-                    active: Binding<Bool>(get: { selectionState.isInLink }, set: { _ = $0 }),
-                    onHover: { over in if over { hoverLabel = Text("Insert Link") } else { hoverLabel = Text("Insert") } }
-                )
+               if MarkupEditorView.whichEditor == "Log" {
+                  
+                  ToolbarTextButton(
+                     title: "LINK",
+                     action: {MarkupEditor.selectedWebView?.showPluggableLinkPopover()}
+                  )
+               } else {
+                  ToolbarImageButton(
+                     systemName: "link",
+                     action: { MarkupEditor.selectedWebView?.showPluggableLinkPopover() },
+                     active: Binding<Bool>(get: { selectionState.isInLink }, set: { _ = $0 }),
+                     onHover: { over in if over { hoverLabel = Text("Insert Link") } else { hoverLabel = Text("Insert") } }
+                  )
+               }
             }
             if contents.image {
                 ToolbarImageButton(
@@ -87,21 +97,21 @@ public struct InsertToolbar: View {
     }
     
 }
-
-struct InsertToolbar_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                InsertToolbar()
-                    .environmentObject(ToolbarStyle.compact)
-                Spacer()
-            }
-            HStack {
-                InsertToolbar()
-                    .environmentObject(ToolbarStyle.labeled)
-                Spacer()
-            }
-            Spacer()
-        }
-    }
-}
+//
+//struct InsertToolbar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VStack(alignment: .leading) {
+//            HStack {
+//                InsertToolbar()
+//                    .environmentObject(ToolbarStyle.compact)
+//                Spacer()
+//            }
+//            HStack {
+//                InsertToolbar()
+//                    .environmentObject(ToolbarStyle.labeled)
+//                Spacer()
+//            }
+//            Spacer()
+//        }
+//    }
+//}

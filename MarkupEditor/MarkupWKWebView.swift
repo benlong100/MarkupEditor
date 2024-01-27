@@ -145,7 +145,9 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
     /// is later populated with html.
     private func initForEditing() {
         isOpaque = false                        // Eliminate flash in dark mode
-        backgroundColor = .systemBackground     // Eliminate flash in dark mode
+       
+       // This next one is mine - it's normally .systemBackground
+        backgroundColor = .clear     // Eliminate flash in dark mode
         initRootFiles()
         markupDelegate?.markupSetup(self)
         // Enable drop interaction
@@ -162,6 +164,7 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
             inputAccessoryView = MarkupToolbarUIView.inputAccessory(markupDelegate: markupDelegate)
         }
         observeFirstResponder()
+//       print(html)
     }
     
     /// Monitor the setting for MarkupEditor.observedFirstResponder, and set this MarkupWKWebView to be the first responder
@@ -797,10 +800,15 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
         // TODO: Use extended attributes for alt text if available
         // (see https://stackoverflow.com/a/38343753/8968411)
         // Make a new unique ID for the image to save in the cacheUrl directory
-        var path = "\(UUID().uuidString).\(url.pathExtension)"
-        if let resourcesUrl {
-            path = resourcesUrl.appendingPathComponent(path).relativePath
-        }
+       
+       // I'M REMOVING THE FOLLOWING LINES BECAUSE WE'VE ALREADY CREATED A NAME FOR THE FILE AND SAVED IT INTO THE APPROPRIATE LIBCOMP OR LOG DIRECTORY.
+//       var path = "\(UUID().uuidString).\(url.pathExtension)"
+//        if let resourcesUrl {
+//            path = resourcesUrl.appendingPathComponent(path).relativePath
+//        }
+       // ADDING THIS NEXT LINE, since we took away the stock method of creating a path
+       var path = url.lastPathComponent
+
         let cachedImageUrl = URL(fileURLWithPath: path, relativeTo: cacheUrl())
         do {
             try FileManager.default.copyItem(at: url, to: cachedImageUrl)

@@ -14,6 +14,7 @@ import UniformTypeIdentifiers
 /// The state is all held in statics to provide convenient access. The MarkupEditor holds onto several
 /// ObservableObjects used by the toolbars.
 public struct MarkupEditor {
+   
     public static var observedFirstResponder = ObservedFirstResponder()
     public static var firstResponder: String? {
         get { observedFirstResponder.id }
