@@ -61,6 +61,7 @@ public struct MarkupToolbar: View {
                     }
                     .environmentObject(toolbarStyle)
                     .padding(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
+<<<<<<< HEAD
                     .padding(.trailing, MarkupEditorView.whichSkin == "LCARS" ? 8 : 0 )
                     .disabled(observedWebView.selectedWebView == nil || !selectionState.valid)
 //                }
@@ -76,6 +77,22 @@ public struct MarkupToolbar: View {
 //                    )
 //                    Spacer()
 //                }
+=======
+                    .disabled(observedWebView.selectedWebView == nil || !selectionState.isValid)
+                }
+                .onTapGesture {}    // To make the buttons responsive inside of the ScrollView
+                if withKeyboardButton {
+                    Spacer()
+                    Divider()
+                    ToolbarImageButton(
+                        systemName: "keyboard.chevron.compact.down",
+                        action: {
+                            _ = MarkupEditor.selectedWebView?.resignFirstResponder()
+                        }
+                    )
+                    Spacer()
+                }
+>>>>>>> upstream/main
             }
         }
         // Because the icons in toolbars are sized based on font, we need to limit their dynamicTypeSize

@@ -13,6 +13,7 @@ import UniformTypeIdentifiers
 ///
 /// The state is all held in statics to provide convenient access. The MarkupEditor holds onto several
 /// ObservableObjects used by the toolbars.
+@MainActor
 public struct MarkupEditor {
    
     public static var observedFirstResponder = ObservedFirstResponder()
@@ -20,6 +21,11 @@ public struct MarkupEditor {
         get { observedFirstResponder.id }
         set { observedFirstResponder.id = newValue }
     }
+    public static var topLevelAttributes: [String : String] = [
+        "contenteditable" : "true",
+        "spellcheck" : "false",
+        "autocorrect" : "true"
+    ]
     public static let markupMenu = MarkupMenu()
     public static let toolbarContents = ToolbarContents.shared
     public static let toolbarStyle = ToolbarStyle()
@@ -86,6 +92,7 @@ public struct MarkupEditor {
     }
 
     /// Emum used to control the toolbar location when using the MarkupEditorView and MarkupEditorUIView
+    @MainActor
     public enum ToolbarLocation {
         case top
         case bottom
@@ -103,6 +110,11 @@ public struct MarkupEditor {
                 return .top
             }
         }
+    }
+    
+    @MainActor
+    public static func userInterfaceIdiom(is idiom: UIUserInterfaceIdiom) -> Bool {
+        UIDevice.current.userInterfaceIdiom == idiom
     }
 
 }

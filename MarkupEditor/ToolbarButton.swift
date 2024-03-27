@@ -13,81 +13,46 @@ import SwiftUI
 /// These RoundedRect buttons show text and outline in activeColor (.accentColor by default), with the
 /// backgroundColor of UIColor.systemBackground. When active, the text and background switch.
 public struct ToolbarImageButton<Content: View>: View {
-   private var toolbarStyle: ToolbarStyle = MarkupEditor.toolbarStyle
-   private let image: Content
-   private let systemName: String?
-   private let action: ()->Void
-   @Binding private var active: Bool
-   private let activeColor: Color
-   private let onHover: ((Bool)->Void)?
-   
-   public var body: some View {
-      Button(action: action, label: {
-         if MarkupEditorView.whichSkin != "LCARS" {
+
+    private let image: Content
+    private let systemName: String?
+    private let action: ()->Void
+    @Binding private var active: Bool
+    private let activeColor: Color
+    private let onHover: ((Bool)->Void)?
+    
+    public var body: some View {
+        Button(action: action, label: {
             label()
-               .frame(width: toolbarStyle.buttonHeight(), height: toolbarStyle.buttonHeight())
-         } else {
-            ZStack {
-               Capsule()
-                  .foregroundColor(.red)
-               HStack {
-                  Spacer()
-                  Text(systemNameToButtonName(systemName: systemName!))
-                     .font(Font.custom("Futura-CondensedMedium", size: 18))
-                     .padding(.top, 9)
-                     .padding(.trailing, 13)
-               }
-            }
-         }
-      })
-      .onHover { over in onHover?(over) }
-      // For MacOS buttons (Optimized Interface for Mac), specifying .contentShape
-      // fixes some flaky problems in surrounding SwiftUI views that are presented
-      // below this one, altho AFAICT not in ones adjacent horizontally.
-      // Ref: https://stackoverflow.com/a/67377002/8968411
-      .contentShape(RoundedRectangle(cornerRadius: 3))
-      .buttonStyle(ToolbarIconButtonStyle(active: $active, activeColor: activeColor))
-   }
-   
-   /// Initialize a button using content. See the extension where Content == EmptyView for the systemName style initialization.
-   public init(action: @escaping ()->Void, active: Binding<Bool> = .constant(false), activeColor: Color = .accentColor, onHover: ((Bool)->Void)? = nil, @ViewBuilder content: ()->Content) {
-      self.systemName = nil
-      self.image = content()
-      self.action = action
-      _active = active
-      self.activeColor = activeColor
-      self.onHover = onHover
-   }
-   
-   private func systemNameToButtonName(systemName: String) -> String {
-      switch systemName {
-      case "arrow.uturn.backward":
-         return "UNDO"
-      case "arrow.uturn.forward" :
-         return "REDO"
-      case "figure.walk" :
-         return "MOVE"
-      case "underline" :
-         return "UNDERLINE"
-      case "italic" :
-         return "ITALIC"
-      case "bold" :
-         return "BOLD"
-         
-      default:
-         return "BUTTON"
-      }
-   }
-   
-   private func label() -> AnyView {
-      // Return either the image derived from content or the properly-sized systemName image based on style
-      if systemName == nil {
-         return AnyView(image)
-      } else {
-         return AnyView(Image(systemName: systemName!).imageScale(.large))
-      }
-   }
-   
+                .frame(width: MarkupEditor.toolbarStyle.buttonHeight(), height: MarkupEditor.toolbarStyle.buttonHeight())
+        })
+        .onHover { over in onHover?(over) }
+        // For MacOS buttons (Optimized Interface for Mac), specifying .contentShape
+        // fixes some flaky problems in surrounding SwiftUI views that are presented
+        // below this one, altho AFAICT not in ones adjacent horizontally.
+        // Ref: https://stackoverflow.com/a/67377002/8968411
+        .contentShape(RoundedRectangle(cornerRadius: 3))
+        .buttonStyle(ToolbarButtonStyle(active: $active, activeColor: activeColor))
+    }
+
+    /// Initialize a button using content. See the extension where Content == EmptyView for the systemName style initialization.
+    public init(action: @escaping ()->Void, active: Binding<Bool> = .constant(false), activeColor: Color = .accentColor, onHover: ((Bool)->Void)? = nil, @ViewBuilder content: ()->Content) {
+        self.systemName = nil
+        self.image = content()
+        self.action = action
+        _active = active
+        self.activeColor = activeColor
+        self.onHover = onHover
+    }
+    
+    private func label() -> AnyView {
+        // Return either the image derived from content or the properly-sized systemName image based on style
+        if systemName == nil {
+            return AnyView(image)
+        } else {
+            return AnyView(Image(systemName: systemName!).imageScale(.large))
+        }
+    }
 }
 
 extension ToolbarImageButton where Content == EmptyView {
@@ -105,54 +70,39 @@ extension ToolbarImageButton where Content == EmptyView {
 }
 
 public struct ToolbarTextButton: View {
-   var toolbarStyle: ToolbarStyle = MarkupEditor.toolbarStyle
-   let title: String
-   let action: ()->Void
-   let width: CGFloat?
-   @Binding var active: Bool
-   let activeColor: Color
-   
-   public var body: some View {
-      Button(action: action, label: {
-         if MarkupEditorView.whichSkin != "LCARS" {
+
+    let title: String
+    let action: ()->Void
+    let width: CGFloat?
+    @Binding var active: Bool
+    let activeColor: Color
+    
+    public var body: some View {
+        Button(action: action, label: {
             Text(title)
-         } else {
-            // THESE ARE THE LCARS BUTTONS
-            ZStack {
-               Capsule()
-                  .foregroundColor(.red)
-               HStack {
-                  Spacer()
-                  Text(title)
-                     .font(Font.custom("Futura-CondensedMedium", size: 18))
-                     .padding(.top, 9)
-                     .padding(.trailing, 13)
-               }
-            }
-         }
-         //                .frame(width: width, height: toolbarStyle.buttonHeight())
-         //                .padding(.horizontal, 8)
-         //                .background(
-         //                    RoundedRectangle(
-         //                        cornerRadius: 3,
-         //                        style: .continuous
-         //                    )
-         //                    .stroke(Color.accentColor)
-         //                    .background(Color(UIColor.systemGray6))
-         //                )
-      })
-      //        .contentShape(RoundedRectangle(cornerRadius: 3))
-      .buttonStyle(ToolbarButtonStyle(active: $active, activeColor: activeColor))
-   }
-   
-   public init(title: String, action: @escaping ()->Void, width: CGFloat? = nil, active: Binding<Bool> = .constant(false), activeColor: Color = .accentColor) {
-      self.title = title
-      self.action = action
-      self.width = width
-      _active = active
-      self.activeColor = activeColor
-   }
-   
+                .frame(width: width, height: MarkupEditor.toolbarStyle.buttonHeight())
+                .padding(.horizontal, 8)
+                .background(
+                    RoundedRectangle(
+                        cornerRadius: 3,
+                        style: .continuous
+                    )
+                    .stroke(Color.accentColor)
+                    .background(Color(UIColor.systemGray6))
+                )
+        })
+        .contentShape(RoundedRectangle(cornerRadius: 3))
+        .buttonStyle(ToolbarButtonStyle(active: $active, activeColor: activeColor))
+    }
+    
+    public init(title: String, action: @escaping ()->Void, width: CGFloat? = nil, active: Binding<Bool> = .constant(false), activeColor: Color = .accentColor) {
+        self.title = title
+        self.action = action
+        self.width = width
+        _active = active
+        self.activeColor = activeColor
+    }
+    
 }
 
 public struct ToolbarIconButtonStyle: ButtonStyle {
@@ -191,7 +141,7 @@ public struct ToolbarIconButtonStyle: ButtonStyle {
       self.activeColor = Color(AnsibleButtonSkin.persLogButtonFG)
    }
    
-   public func makeBody(configuration: Self.Configuration) -> some View {
+   @MainActor public func makeBody(configuration: Self.Configuration) -> some View {
       if MarkupEditorView.whichSkin == "Stock Science Fiction" {
          configuration.label
             .padding(.horizontal)
@@ -307,7 +257,7 @@ public struct ToolbarButtonStyle: ButtonStyle {
       self.activeColor = Color(AnsibleButtonSkin.persLogButtonFG)
    }
    
-   public func makeBody(configuration: Self.Configuration) -> some View {
+   @MainActor public func makeBody(configuration: Self.Configuration) -> some View {
       if MarkupEditorView.whichSkin == "Stock Science Fiction" {
          configuration.label
             .padding(.horizontal)
