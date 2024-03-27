@@ -19,7 +19,7 @@ public struct FormatToolbar: View {
     public var body: some View {
         LabeledToolbar(label: hoverLabel) {
            
-           if MarkupEditorView.whichEditor == "Log" {
+           if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
               ToolbarTextButton(
                title: "BOLD",
                action: {
@@ -42,7 +42,7 @@ public struct FormatToolbar: View {
                onHover: { over in hoverLabel = Text(over ? "Bold" : "Text Format") }
               )
            }
-           if MarkupEditorView.whichEditor == "Log" {
+           if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
               ToolbarTextButton(
                title: "ITALIC",
                action: {
@@ -81,7 +81,7 @@ public struct FormatToolbar: View {
 //               onHover: { over in hoverLabel = Text(over ? "Underline" : "Text Format") }
 //              )
 //           }
-           if MarkupEditorView.whichEditor == "Log" {
+           if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
               ToolbarTextButton(
                title: "SUBHEAD",
                action: {
@@ -107,7 +107,7 @@ public struct FormatToolbar: View {
               )
            }
            
-           if MarkupEditorView.whichEditor == "Log" {
+           if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
               ToolbarTextButton(
                title: "MOVE",
                action: {

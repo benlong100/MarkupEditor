@@ -15,7 +15,7 @@ public struct CorrectionToolbar: View {
    
    public var body: some View {
       LabeledToolbar(label: hoverLabel) {
-         if MarkupEditorView.whichEditor == "Log" {
+         if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
             ToolbarTextButton(
                title: "UNDO",
                action: {  observedWebView.selectedWebView?.undo()}
@@ -33,7 +33,7 @@ public struct CorrectionToolbar: View {
                onHover: { over in hoverLabel = Text(over ? "Undo" : "Correction") }
             )
          }
-         if MarkupEditorView.whichEditor == "Log" {
+         if MarkupEditorView.whichEditor == "Log"  && MarkupEditorView.whichSkin != "The Establishment" {
             ToolbarTextButton(
                title: "REDO",
                action: {

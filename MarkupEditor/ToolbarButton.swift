@@ -248,6 +248,14 @@ public struct ToolbarIconButtonStyle: ButtonStyle {
             .font(Font.custom("Inconsolata-Regular", size: 18))
             .foregroundColor(active ? Color(AnsibleButtonSkin.libCompIconButtonFG) : activeColor)
             .background(active ? Color(AnsibleButtonSkin.libCompIconButtonBG) : Color(.clear))
+      } else if MarkupEditorView.whichSkin == "TerminalLog" {
+         configuration.label
+            .padding(.horizontal)
+            .padding(.top, 5)
+            .padding(.bottom, 5)
+            .font(Font.custom("Inconsolata-Regular", size: 18))
+            .foregroundColor(active ? Color(AnsibleButtonSkin.libCompIconButtonFG) : activeColor)
+            .background(active ? Color(AnsibleButtonSkin.libCompIconButtonBG) : Color(.clear))
       } else if MarkupEditorView.whichSkin == "LCARS" {
          configuration.label
             .frame(width: 90 , height: 36, alignment: .center)
@@ -351,6 +359,22 @@ public struct ToolbarButtonStyle: ButtonStyle {
             .font(Font.custom("Inconsolata-Regular", size: 18))
             .foregroundColor(active ? Color(AnsibleButtonSkin.persLogButtonFG) : activeColor)
             .background(active ? Color(AnsibleButtonSkin.logTextButtonHighlightBGColor) : Color(AnsibleButtonSkin.logTextButtonBackgroundColor))
+         
+         // This style is different from the others because I was having trouble with the button background color filling the entire bottom padding area.
+      } else if MarkupEditorView.whichSkin == "TerminalLog" {
+         configuration.label
+             .padding(.horizontal)
+             .padding(.top, 5)
+             .padding(.bottom, 35)
+             .font(Font.custom("Inconsolata-Regular", size: 18))
+             .foregroundColor(active ? Color(AnsibleButtonSkin.persLogButtonFG) : activeColor)
+             .background(
+                 GeometryReader { geometry in
+                     (active ? Color(AnsibleButtonSkin.logTextButtonHighlightBGColor) : Color(AnsibleButtonSkin.logTextButtonBackgroundColor))
+                         .frame(height: geometry.size.height - 35) // Adjust the height to exclude the bottom padding
+                         .padding(.bottom, 40) // Push the background up to exclude the bottom padding area
+                 }
+             )
       } else if MarkupEditorView.whichSkin == "LCARS" {
          configuration.label
             .frame(width: 90 , height: 36, alignment: .center)
