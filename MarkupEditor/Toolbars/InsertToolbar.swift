@@ -29,20 +29,40 @@ public struct InsertToolbar: View {
     public var body: some View {
         LabeledToolbar(label: hoverLabel) {
             if contents.link {
-                ToolbarImageButton(
-                    systemName: "link",
-                    action: { MarkupEditor.selectedWebView?.showPluggableLinkPopover() },
-                    active: Binding<Bool>(get: { selectionState.isInLink }, set: { _ = $0 }),
-                    onHover: { over in if over { hoverLabel = Text("Insert Link") } else { hoverLabel = Text("Insert") } }
-                )
+               if contents.link {
+                   if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
+                       ToolbarTextButton(
+                           title: "LINK",
+                           action: { MarkupEditor.selectedWebView?.showPluggableLinkPopover() }
+                       )
+                   } else {
+                       ToolbarImageButton(
+                           systemName: "link",
+                           action: { MarkupEditor.selectedWebView?.showPluggableLinkPopover() },
+                           active: Binding<Bool>(get: { selectionState.isInLink }, set: { _ = $0 }),
+                           onHover: { over in
+                               if over { hoverLabel = Text("Insert Link") }
+                               else { hoverLabel = Text("Insert") }
+                           }
+                       )
+                   }
+               }
+
             }
             if contents.image {
-                ToolbarImageButton(
-                    systemName: "photo",
-                    action: { MarkupEditor.selectedWebView?.showPluggableImagePopover() },
-                    active: Binding<Bool>(get: { selectionState.isInImage }, set: { _ = $0 }),
-                    onHover: { over in if over { hoverLabel = Text("Insert Image") } else { hoverLabel = Text("Insert") } }
-                )
+               if MarkupEditorView.whichEditor == "Log" && MarkupEditorView.whichSkin != "The Establishment" {
+                  ToolbarTextButton(
+                     title: "PHOTO",
+                     action: { MarkupEditor.selectedWebView?.showPluggableImagePopover() }
+                  )
+               } else {
+                  ToolbarImageButton(
+                     systemName: "photo",
+                     action: { MarkupEditor.selectedWebView?.showPluggableImagePopover() },
+                     active: Binding<Bool>(get: { selectionState.isInImage }, set: { _ = $0 }),
+                     onHover: { over in if over { hoverLabel = Text("Insert Image") } else { hoverLabel = Text("Insert") } }
+                  )
+               }
             }
             if contents.table {
                 ToolbarImageButton(
