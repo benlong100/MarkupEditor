@@ -147,7 +147,7 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
     /// is later populated with html.
     private func initForEditing() {
         isOpaque = false                        // Eliminate flash in dark mode
-        backgroundColor = .systemBackground     // Eliminate flash in dark mode
+        backgroundColor = .clear     // Eliminate flash in dark mode
         initRootFiles()
         markupDelegate?.markupSetup(self)
         // Enable drop interaction
@@ -920,12 +920,12 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
         if let resourcesUrl {
             path = resourcesUrl.appendingPathComponent(path).relativePath
         }
-        let cachedImageUrl = URL(fileURLWithPath: path, relativeTo: cacheUrl())
-        do {
-            try FileManager.default.copyItem(at: url, to: cachedImageUrl)
-            insertImage(src: path, alt: nil) {
-                handler?(cachedImageUrl)
-            }
+       let cachedImageUrl = URL(fileURLWithPath: url.lastPathComponent, relativeTo: cacheUrl())
+       do {
+           if FileManager.default.fileExists(atPath: cachedImageUrl.path) {
+               try FileManager.default.removeItem(at: cachedImageUrl)
+           }
+           try FileManager.default.copyItem(at: url, to: cachedImageUrl)
         } catch let error {
             Logger.webview.error("Error inserting local image: \(error.localizedDescription)")
             handler?(cachedImageUrl)
