@@ -31,6 +31,11 @@ public struct MarkupEditorView: View, MarkupDelegate {
     private var selectAfterLoad: Bool = true
     /// The placeholder text that should be shown when there is no user input.
     public var placeholder: String?
+   
+    public static var whichEditor: String?
+    public static var whichSkin: String?
+    public static var whichLogButtonType: String?
+
     
     public var body: some View {
         VStack(spacing: 0) {
@@ -68,6 +73,71 @@ public struct MarkupEditorView: View, MarkupDelegate {
             self.id = id
             self.placeholder = placeholder
         }
+   
+   public init(
+       markupDelegate: MarkupDelegate? = nil,
+       wkNavigationDelegate: WKNavigationDelegate? = nil,
+       wkUIDelegate: WKUIDelegate? = nil,
+       userScripts: [String]? = nil,
+       configuration: MarkupWKWebViewConfiguration? = nil,
+       html: Binding<String>,
+       placeholder: String? = nil,
+       whichEditor: String,
+       whichSkin: String,
+       selectAfterLoad: Bool = true,
+       resourcesUrl: URL? = nil,
+       id: String? = nil
+   ) {
+       MarkupEditorView.whichEditor = whichEditor
+       MarkupEditorView.whichSkin = whichSkin
+
+       self.init(
+           markupDelegate: markupDelegate,
+           wkNavigationDelegate: wkNavigationDelegate,
+           wkUIDelegate: wkUIDelegate,
+           userScripts: userScripts,
+           configuration: configuration,
+           html: html as Binding<String>?,
+           placeholder: placeholder,
+           selectAfterLoad: selectAfterLoad,
+           resourcesUrl: resourcesUrl,
+           id: id
+       )
+   }
+
+   public init(
+       markupDelegate: MarkupDelegate? = nil,
+       wkNavigationDelegate: WKNavigationDelegate? = nil,
+       wkUIDelegate: WKUIDelegate? = nil,
+       userScripts: [String]? = nil,
+       configuration: MarkupWKWebViewConfiguration? = nil,
+       html: Binding<String>,
+       placeholder: String? = nil,
+       whichEditor: String,
+       whichSkin: String,
+       whichLogButtonType: String,
+       selectAfterLoad: Bool = true,
+       resourcesUrl: URL? = nil,
+       id: String? = nil
+   ) {
+       MarkupEditorView.whichEditor = whichEditor
+       MarkupEditorView.whichSkin = whichSkin
+      MarkupEditorView.whichLogButtonType = whichLogButtonType
+
+       // IMPORTANT: call the *original* initializer (html is optional there)
+       self.init(
+           markupDelegate: markupDelegate,
+           wkNavigationDelegate: wkNavigationDelegate,
+           wkUIDelegate: wkUIDelegate,
+           userScripts: userScripts,
+           configuration: configuration,
+           html: html as Binding<String>?,
+           placeholder: placeholder,
+           selectAfterLoad: selectAfterLoad,
+           resourcesUrl: resourcesUrl,
+           id: id
+       )
+   }
 
 }
 

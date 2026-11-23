@@ -1288,6 +1288,29 @@ public class MarkupWKWebView: WKWebView, ObservableObject {
             handler?()
         }
     }
+
+    /// Convert plain pasteboard text into HTML that preserves its line structure.
+    ///
+    /// MU.pasteText parses its argument as HTML, where newlines are ordinary whitespace,
+    /// so paragraph breaks in plain text are otherwise lost. Blank lines become paragraph
+    /// boundaries; single newlines within a paragraph become <br>.
+    private func htmlFromPlainText(_ text: String?) -> String? {
+        guard let text else { return nil }
+        let normalized = text
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+        guard normalized.contains("\n") else { return text }
+        let escaped = normalized
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+        let paragraphs = escaped
+            .components(separatedBy: "\n\n")
+            .map { $0.trimmingCharacters(in: .newlines) }
+            .filter { !$0.isEmpty }
+            .map { "<p>\($0.replacingOccurrences(of: "\n", with: "<br>"))</p>" }
+        return paragraphs.joined()
+    }
     
     public func pasteHtml(_ html: String?, handler: (()->Void)? = nil) {
         guard let html = html, !pastedAsync else { return }
@@ -1741,7 +1764,7 @@ extension MarkupWKWebView {
         let pasteboard = UIPasteboard.general
         switch pasteableType {
         case .Text:
-            pasteText(pasteboard.string)
+            pasteText(htmlFromPlainText(pasteboard.string))
         case .Html:
             if let data = pasteboard.data(forPasteboardType: "public.html") {
                 pasteHtml(String(data: data, encoding: .utf8))
@@ -1833,7 +1856,7 @@ extension MarkupWKWebView {
         let pasteboard = UIPasteboard.general
         switch pasteableType {
         case .Text, .Rtf:
-            pasteText(pasteboard.string)
+            pasteText(htmlFromPlainText(pasteboard.string))
         case .Html:
             if let data = pasteboard.data(forPasteboardType: "public.html") {
                 pasteText(String(data: data, encoding: .utf8))

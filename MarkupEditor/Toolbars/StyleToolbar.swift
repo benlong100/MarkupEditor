@@ -45,7 +45,7 @@ public struct StyleToolbar: View {
                         Text(selectionState.style.name)
                             .frame(width: 88, height: toolbarStyle.buttonHeight(), alignment: .center)
                     }
-                    .buttonStyle(.borderless)
+                   // .buttonStyle(.borderless)
                     .menuStyle(.button)         // Not available until iOS 16
                     .frame(width: 88, height: toolbarStyle.buttonHeight())
                     .overlay(
